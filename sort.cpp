@@ -1,152 +1,328 @@
 #include <iostream>
 #include <chrono>
-#include <cstdlib>
 #include <time.h>
+#include <windows.h>
 #include <fstream>
-#include <string>
 
 using namespace std;
-using namespace chrono;
 
-string times[100];
-int base_elements[10000];
+int value, o;
+int arr_size = 20;
+int n = 100;
+int error[5] = {};
+long double avg[5] = {};
+string names[5] = {"Selection", "Insertion", "Bubble", "Merge", "Quick"};
+ofstream result("results.txt");
+ofstream array("arrays.txt");
 
-void saveData(string f)
+void Print_Array(int arr[], int size)
 {
-    ofstream MyFile("results_" + f + ".txt");
-
-    for (int q = 0; q < 100; q++)
+    array <<" [ ";
+    for (int i = 0; i < size; i++)
     {
-        MyFile << times[q] + "\n";
+        array << arr[i] << " ";
     }
-    MyFile.close();
+    array << "]\n";
 }
 
-void bubble_sort(int arr[], int q)
+void Copy_Array(int elements[], int elements_copy[], int size)
 {
-    auto start_time = high_resolution_clock::now();
-    for (int x = 10000; x > 0; x--)
+    for (int i = 0; i < size; i++)
     {
-        for (int y = 0; y < x; y++)
-        {
-            if (arr[y] > arr[y + 1])
-            {
-                int temp = arr[y];
-                arr[y] = arr[y + 1];
-                arr[y + 1] = temp;
-            }
-        }
+        elements_copy[i] = elements[i];
     }
-    auto end_time = high_resolution_clock::now();
-    int duration = duration_cast<chrono::milliseconds>(end_time - start_time).count();
-    int seconds = duration / 1000;
-    int miliseconds = duration - (seconds * 1000);
-    string a = to_string(seconds) + "," + to_string(miliseconds) + " s";
-    times[q] = a;
 }
 
-void selection_sort(int arr[], int q)
+bool Check_Array(int arr[], int arr_size)
 {
-    int temp = 0;
-    int idx;
+    bool code = 0;
 
-    auto start_time = high_resolution_clock::now();
-
-    for (int x = 0; x < 10000; x++)
+    for (int i = 0; i < arr_size - 1; i++)
     {
-        for (int y = x; y < 10000; y++)
+        if (arr[i] > arr[i + 1])
         {
-            if (arr[y] > temp)
-            {
-                temp = arr[y];
-                idx = y;
-            }
-        }
-        int move = arr[x];
-        arr[x] = temp;
-        arr[idx] = move;
-    }
-    auto end_time = high_resolution_clock::now();
-    int duration = duration_cast<chrono::milliseconds>(end_time - start_time).count();
-    int seconds = duration / 1000;
-    int miliseconds = duration - (seconds * 1000);
-    string a = to_string(seconds) + "," + to_string(miliseconds) + " s";
-    times[q] = a;
-}
-
-void insertion_sort(int arr[], int q)
-{
-    int temp = 0;
-    int idx;
-
-    auto start_time = high_resolution_clock::now();
-
-    for (int x = 1; x < 10000; x++)
-    {
-        for (int i = x; i > 0; i--)
-        {
-            if (arr[i - 1] > arr[i])
-            {
-                int temp = arr[i];
-                arr[i] = arr[i - 1];
-                arr[i - 1] = temp;
-            }
+            code = 1;
+            break;
         }
     }
 
-    auto end_time = high_resolution_clock::now();
-    int duration = duration_cast<chrono::milliseconds>(end_time - start_time).count();
-    int seconds = duration / 1000;
-    int miliseconds = duration - (seconds * 1000);
-    string a = to_string(seconds) + "," + to_string(miliseconds) + " s";
-    times[q] = a;
+    return code;
+}
+
+void Selection_Sort(int arr[], int size)
+{
+
+    for (int i = 0; i < size - 1; i++)
+    {
+        int min_idx = i;
+
+        for (int j = i + 1; j < size; j++)
+        {
+            if (arr[j] < arr[min_idx])
+            {
+                min_idx = j;
+            }
+        }
+
+        int temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+}
+
+void Insertion_Sort(int arr[], int size)
+{
+    for (int i = 1; i < size; i++)
+    {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > key)
+        {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+
+        arr[j + 1] = key;
+    }
+}
+
+void Bubble_Sort(int arr[], int size)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = 0; j < size - i - 1; j++)
+        {
+            if (arr[j] > arr[j + 1])
+            {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void Merge(int arr[], int start, int mid, int end)
+{
+    int n1 = mid - start + 1;
+    int n2 = end - mid;
+
+    int left[n1], right[n2];
+
+    for (int i = 0; i < n1; i++)
+    {
+        left[i] = arr[start + i];
+    }
+
+    for (int j = 0; j < n2; j++)
+    {
+        right[j] = arr[mid + 1 + j];
+    }
+
+    int i = 0;
+    int j = 0;
+    int k = start;
+
+    while (i < n1 && j < n2)
+    {
+        if (left[i] <= right[j])
+        {
+            arr[k] = left[i];
+            i++;
+        }
+        else
+        {
+            arr[k] = right[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1)
+    {
+        arr[k] = left[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2)
+    {
+        arr[k] = right[j];
+        j++;
+        k++;
+    }
+}
+
+void Merge_Sort(int arr[], int start, int end)
+{
+    if (start < end)
+    {
+        int mid = start + (end - start) / 2;
+
+        Merge_Sort(arr, start, mid);
+        Merge_Sort(arr, mid + 1, end);
+
+        Merge(arr, start, mid, end);
+    }
+}
+
+void Quick_Sort(int arr[], int start, int end)
+{
+    if (start < end)
+    {
+        int pivot = arr[end];
+        int i = start - 1;
+
+        for (int j = start; j <= end - 1; j++)
+        {
+            if (arr[j] < pivot)
+            {
+                i++;
+                swap(arr[i], arr[j]);
+            }
+        }
+
+        swap(arr[i + 1], arr[end]);
+
+        int partition_index = i + 1;
+
+        Quick_Sort(arr, start, partition_index - 1);
+        Quick_Sort(arr, partition_index + 1, end);
+    }
 }
 
 int main()
 {
+    chrono::time_point<std::chrono::high_resolution_clock> start, end;
+
+    result << "Sample;";
+    for (int i = 0; i < 5; i++)
+    {
+        result << names[i] + ";";
+    }
+    result << "\n";
+
     srand(time(0));
 
-    // Bubble sort
-
-    for (int q = 0; q < 100; q++)
+    int elements[arr_size];
+    int elements_copy[arr_size];
+    for (int a = 0; a < n; a++)
     {
-        for (int i = 0; i < 10000; i++)
-        {
-            base_elements[i] = rand() % 100;
-        }
+        o = a + 1;
+        result << o << ";";
 
-        bubble_sort(base_elements, q);
+        array << o << ": " <<"[ ";
+        for (int i = 0; i < arr_size; i++)
+        {
+            value = rand() % 100;
+            elements[i] = elements_copy[i] = value;
+            array << value << " ";
+        }
+        array << "]\n";
+        // Selection Sort
+
+        start = chrono::high_resolution_clock::now();
+
+        Selection_Sort(elements_copy, arr_size);
+
+        end = chrono::high_resolution_clock::now();
+        chrono::duration<long double> elapsed = end - start;
+
+        result << elapsed.count() << ";";
+
+        avg[0] += elapsed.count();
+
+        error[0] += Check_Array(elements_copy, arr_size);
+
+        Print_Array(elements_copy, arr_size);
+
+        Copy_Array(elements, elements_copy, arr_size);
+
+        // Insertion Sort
+
+        start = chrono::high_resolution_clock::now();
+
+        Insertion_Sort(elements_copy, arr_size);
+
+        end = chrono::high_resolution_clock::now();
+        elapsed = end - start;
+        result << elapsed.count() << ";";
+
+        avg[1] += elapsed.count();
+
+        error[1] += Check_Array(elements_copy, arr_size);
+
+        Print_Array(elements_copy, arr_size);
+
+        Copy_Array(elements, elements_copy, arr_size);
+
+        // Bubble Sort
+
+        start = chrono::high_resolution_clock::now();
+
+        Bubble_Sort(elements_copy, arr_size);
+
+        end = chrono::high_resolution_clock::now();
+        elapsed = end - start;
+        result << elapsed.count() << ";";
+
+        avg[2] += elapsed.count();
+
+        error[2] += Check_Array(elements_copy, arr_size);
+
+        Print_Array(elements_copy, arr_size);
+
+        Copy_Array(elements, elements_copy, arr_size);
+
+        // Merge Sort
+
+        start = chrono::high_resolution_clock::now();
+
+        Merge_Sort(elements_copy, 0, arr_size - 1);
+
+        end = chrono::high_resolution_clock::now();
+        elapsed = end - start;
+        result << elapsed.count() << ";";
+
+        avg[3] += elapsed.count();
+
+        error[3] += Check_Array(elements_copy, arr_size);
+
+        Print_Array(elements_copy, arr_size);
+
+        Copy_Array(elements, elements_copy, arr_size);
+
+        // Quick Sort
+
+        start = chrono::high_resolution_clock::now();
+
+        Quick_Sort(elements_copy, 0, arr_size - 1);
+
+        end = chrono::high_resolution_clock::now();
+        elapsed = end - start;
+        result << elapsed.count() << ";\n";
+
+        avg[4] += elapsed.count();
+
+        error[4] += Check_Array(elements_copy, arr_size);
+
+        Print_Array(elements_copy, arr_size);
+    }
+    result << "Avg;";
+    for (int i = 0; i < 5; i++)
+    {
+        avg[i] /= n;
+        result << avg[i] << ";";
     }
 
-    saveData("b");
-
-    // Selection sort
-
-    for (int q = 0; q < 100; q++)
+    for (int i = 0; i < 5; i++)
     {
-        for (int i = 0; i < 10000; i++)
-        {
-            base_elements[i] = rand() % 100;
-        }
-
-        selection_sort(base_elements, q);
+        cout << names[i] << " sorting errors: " << error[i] << "\n";
     }
 
-    saveData("s");
-
-    // Insertion sort
-
-    for (int q = 0; q < 100; q++)
-    {
-        for (int i = 0; i < 10000; i++)
-        {
-            base_elements[i] = rand() % 100;
-        }
-
-        insertion_sort(base_elements, q);
-    }
-
-    saveData("i");
+    result.close();
+    array.close();
 
     return 0;
 }
