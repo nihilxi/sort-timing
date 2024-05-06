@@ -9,7 +9,7 @@ using namespace std;
 int value, o, arr_size, n;
 int error[15] = {};
 long double avg[15] = {};
-string names[15] = {"Selection", "Selection Same", "Selection Reverse", "Insertion", "Insertion Same", "Insertion Reverse", "Bubble", "Bubble Same", "Bubble Reverse", "Merge", "Merge Same", "Merge Reverse", "Quick", "Quick Same", "Quick Reverse"};
+string names[15] = {"Selection", "Selection Sorted", "Selection Reverse", "Insertion", "Insertion Sorted", "Insertion Reverse", "Bubble", "Bubble Sorted", "Bubble Reverse", "Merge", "Merge Sorted", "Merge Reverse", "Quick", "Quick Sorted", "Quick Reverse"};
 ofstream result("results.txt");
 
 void Reverse_Array(int arr[], int size)
@@ -244,7 +244,7 @@ int main()
 
         error[0] += Check_Array(elements_copy, arr_size);
 
-        // Selection Sort Same
+        // Selection Sort Sorted
 
         start = chrono::high_resolution_clock::now();
 
@@ -290,7 +290,7 @@ int main()
 
         error[3] += Check_Array(elements_copy, arr_size);
 
-        // Insertion Sort Same
+        // Insertion Sort Sorted
 
         start = chrono::high_resolution_clock::now();
 
@@ -336,7 +336,7 @@ int main()
 
         error[6] += Check_Array(elements_copy, arr_size);
 
-        // Bubble Sort Same
+        // Bubble Sort Sorted
 
         start = chrono::high_resolution_clock::now();
 
@@ -382,7 +382,7 @@ int main()
 
         error[9] += Check_Array(elements_copy, arr_size);
 
-        // Merge Sort Same
+        // Merge Sort Sorted
 
         start = chrono::high_resolution_clock::now();
 
@@ -428,7 +428,7 @@ int main()
 
         error[12] += Check_Array(elements_copy, arr_size);
 
-        // Quick Sort Same
+        // Quick Sort Sorted
 
         start = chrono::high_resolution_clock::now();
 
