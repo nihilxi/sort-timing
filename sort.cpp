@@ -1,7 +1,6 @@
 #include <iostream>
 #include <chrono>
 #include <time.h>
-#include <windows.h>
 #include <fstream>
 
 using namespace std;
@@ -12,7 +11,6 @@ int error[15] = {};
 long double avg[15] = {};
 string names[15] = {"Selection", "Selection Same", "Selection Reverse", "Insertion", "Insertion Same", "Insertion Reverse", "Bubble", "Bubble Same", "Bubble Reverse", "Merge", "Merge Same", "Merge Reverse", "Quick", "Quick Same", "Quick Reverse"};
 ofstream result("results.txt");
-ofstream array("arrays.txt");
 
 void Reverse_Array(int arr[], int size)
 {
@@ -28,17 +26,6 @@ void Reverse_Array(int arr[], int size)
         start++;
         end--;
     }
-}
-
-// function for printing arrays in array.txt
-void Print_Array(int arr[], int size)
-{
-    array << " [ ";
-    for (int i = 0; i < size; i++)
-    {
-        array << arr[i] << " ";
-    }
-    array << "]\n";
 }
 
 void Copy_Array(int elements[], int elements_copy[], int size)
@@ -236,17 +223,12 @@ int main()
         // Row numbering
         o = a + 1;
         result << o << ";";
-        array << o << ": "
-              << "[ ";
 
         for (int i = 0; i < arr_size; i++)
         {
             value = rand() % 100;
             elements[i] = elements_copy[i] = value;
-            array << value << " ";
         }
-        array << "]\n";
-
         // Selection Sort
 
         start = chrono::high_resolution_clock::now();
@@ -262,8 +244,6 @@ int main()
 
         error[0] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         // Selection Sort Same
 
         start = chrono::high_resolution_clock::now();
@@ -277,8 +257,6 @@ int main()
         avg[1] += elapsed.count();
 
         error[1] += Check_Array(elements_copy, arr_size);
-
-        Print_Array(elements_copy, arr_size);
 
         // Selection Sort Reverse
 
@@ -296,8 +274,6 @@ int main()
 
         error[2] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         Copy_Array(elements, elements_copy, arr_size);
 
         // Insertion Sort
@@ -314,8 +290,6 @@ int main()
 
         error[3] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         // Insertion Sort Same
 
         start = chrono::high_resolution_clock::now();
@@ -329,8 +303,6 @@ int main()
         avg[4] += elapsed.count();
 
         error[4] += Check_Array(elements_copy, arr_size);
-
-        Print_Array(elements_copy, arr_size);
 
         // Insertion Sort Reverse
 
@@ -348,8 +320,6 @@ int main()
 
         error[5] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         Copy_Array(elements, elements_copy, arr_size);
 
         // Bubble Sort
@@ -366,8 +336,6 @@ int main()
 
         error[6] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         // Bubble Sort Same
 
         start = chrono::high_resolution_clock::now();
@@ -381,8 +349,6 @@ int main()
         avg[7] += elapsed.count();
 
         error[7] += Check_Array(elements_copy, arr_size);
-
-        Print_Array(elements_copy, arr_size);
 
         // Bubble Sort Reverse
 
@@ -400,8 +366,6 @@ int main()
 
         error[8] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         Copy_Array(elements, elements_copy, arr_size);
 
         // Merge Sort
@@ -418,8 +382,6 @@ int main()
 
         error[9] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         // Merge Sort Same
 
         start = chrono::high_resolution_clock::now();
@@ -433,8 +395,6 @@ int main()
         avg[10] += elapsed.count();
 
         error[10] += Check_Array(elements_copy, arr_size);
-
-        Print_Array(elements_copy, arr_size);
 
         // Merge Sort Reverse
 
@@ -452,8 +412,6 @@ int main()
 
         error[11] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         Copy_Array(elements, elements_copy, arr_size);
 
         // Quick Sort
@@ -470,8 +428,6 @@ int main()
 
         error[12] += Check_Array(elements_copy, arr_size);
 
-        Print_Array(elements_copy, arr_size);
-
         // Quick Sort Same
 
         start = chrono::high_resolution_clock::now();
@@ -485,8 +441,6 @@ int main()
         avg[13] += elapsed.count();
 
         error[13] += Check_Array(elements_copy, arr_size);
-
-        Print_Array(elements_copy, arr_size);
 
         // Quick Sort Reverse
 
@@ -503,8 +457,6 @@ int main()
         avg[14] += elapsed.count();
 
         error[14] += Check_Array(elements_copy, arr_size);
-
-        Print_Array(elements_copy, arr_size);
     }
     // calculate average time for every sort algorithm
     result << "Avg;";
@@ -522,7 +474,6 @@ int main()
     }
 
     result.close();
-    array.close();
 
     return 0;
 }
